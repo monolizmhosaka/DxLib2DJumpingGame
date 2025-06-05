@@ -33,9 +33,10 @@ Player::~Player()
 void Player::init()
 {
 	_box.pos.y = 0;		// 上から降ってくる
+	_prevBox.pos.y = 0;
 
 	_upPower = 0;	// ジャンプの加速度
-	_jumpFlag = 0;	// ジャンプ中フラグ
+	_jumpFlag = 1;	// ジャンプ中フラグ
 	_animationCount = 0;
 
 	_rotate = 0;		// ラジアンね。
@@ -204,7 +205,7 @@ void Player::innerOnCollisionEvent(BoxCollider* tBox)
 						_jumpFlag = FALSE;
 
 						p->freeze();
-						//p->setBox(hitBox2);
+						p->setBox(p->getHitedBox());
 					}
 				}
 			}

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DxLibEx.h"
+
 #include <vector>
 
 using namespace std;
@@ -17,6 +19,9 @@ public:
 
 	PaddleFactory(const PaddleFactory&) = delete;	// コピーコンストラクタ禁止
 	void operator=(const PaddleFactory&) = delete;	// 代入も禁止
+
+	Paddle* getPaddle(int i) const;
+	void createPaddle(BOX bbox);
 
 private:
 	PaddleFactory() {};

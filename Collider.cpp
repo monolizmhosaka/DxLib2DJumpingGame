@@ -41,11 +41,32 @@ bool compareByBoxY(const BoxCollider* a, const BoxCollider* b) {
 
 void Collider::push(BoxCollider* pBox)
 {
-	_pBoxList.push_back(pBox);
+//	_pBoxList.push_back(pBox);
 
 	// 本当は挿入先を検索しながら、、、でいいんだけどね.というかそっちのが早い
 	// でもソート関数の使い方もかねてるん。
-	std::sort(_pBoxList.begin(), _pBoxList.end(), compareByBoxY);
+//	std::sort(_pBoxList.begin(), _pBoxList.end(), compareByBoxY);
+	auto it = _pBoxList.begin();
+	for (; it != _pBoxList.end(); it++)
+	{
+		double y = (*it)->getBox().pos.y;
+		if (y > pBox->getBox().pos.y)
+		{
+			//printfDx("%d>%d\n", (int)y, (int)pBox->getBox().pos.y);
+			it = _pBoxList.insert(it, pBox);
+			break;
+		}
+	}
+	// 見つかっていない場合は最後に入れる
+	if (it == _pBoxList.end()) _pBoxList.push_back(pBox);
+	
+	//for (auto it = _pBoxList.begin(); it != _pBoxList.end(); it++)
+	//{
+	//	double y = (*it)->getBox().pos.y;
+	//	printfDx("%d ", (int)y);
+	//}
+	//printfDx("\n");
+
 }
 
 
@@ -71,38 +92,19 @@ void Collider::updateCollision()
 			BOX prevBox2 = (*it2)->getPrevBox();
 
 			// それぞれの速度を求め相対速度を求める
-			VECTOR_D box1Volocity = { box.pos.x - prevBox.pos.x, box.pos.y - prevBox.pos.y, .0f };
-			VECTOR_D box2Volocity = { box2.pos.x - prevBox2.pos.x, box2.pos.y - prevBox2.pos.y, .0f };
-			VECTOR_D v = VSubD(box1Volocity, box2Volocity);
+			VECTOR_D box1v = { box.pos.x - prevBox.pos.x, box.pos.y - prevBox.pos.y, .0f };
+			VECTOR_D box2v = { box2.pos.x - prevBox2.pos.x, box2.pos.y - prevBox2.pos.y, .0f };
 			
-			// 惹かれた方が実際に相対座標上の位置を求める
-
-
 			// とりあえず刻んで当たり判定を厳密に行う
-			//printfDx("vx=%lf vy=%lf \n", v.x, v.y);
-			for (int i = 1; i <= 10; i++) {
-				BOX relativeBox = { prevBox.pos.x + (v.x / i), prevBox.pos.y + (v.y / i), box.size.w, box.size.h };
-				BOX relativeBox2 = prevBox2;
+			for (int i = 10; i >= 0; i--) {
+				BOX relativeBox = { prevBox.pos.x + (box1v.x * i/10), prevBox.pos.y + (box1v.y * i / 10), box.size.w, box.size.h };
+				BOX relativeBox2 = { prevBox2.pos.x + (box2v.x * i / 10), prevBox2.pos.y + (box2v.y * i / 10), box2.size.w, box2.size.h };
 
 				if (collisionBoxBox(relativeBox, relativeBox2))
-					//if (collisionBoxBox(box, box2))
 				{
-					if ((*it)->getTag() == BoxCollider::PLAYER) printfDx("1i=%d\n", i);
-					if ((*it2)->getTag() == BoxCollider::PLAYER) printfDx("2i=%d\n", i);
+					(*it)->setHitedBox(relativeBox);
+					(*it2)->setHitedBox(relativeBox2);
 
-					//!!!□ここは本来、当たり判定が行われて実際に当たった時のBOX構造体をもつ
-					//! //colliderを渡す必要がある。そうしないと個々の処理と会わなくなる。
-					
-					// 当たったタイミングの本当の位置を求める
-					//relativeBox.pos.x = prevBox.pos.x + (box1Volocity.x * i / 10.0);
-					//relativeBox.pos.y = box.pos.y;
-
-					//relativeBox2.pos.x = prevBox2.pos.x + (box2Volocity.x * i / 10.0);
-					//relativeBox2.pos.y = box2.pos.y;
-
-					////両方とも呼び出すことにする。いい方法ないかな。。。
-					//(*it)->OnCollisionEvent(*it2, relativeBox, relativeBox2);
-					//(*it2)->OnCollisionEvent(*it, relativeBox2, relativeBox);
 					(*it)->OnCollisionEvent(*it2);
 					(*it2)->OnCollisionEvent(*it);
 					break;

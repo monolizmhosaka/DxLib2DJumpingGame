@@ -52,12 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// プレイヤー情報
 	Player player;
 	player.setTag(BoxCollider::PLAYER);
-	player.debugValidFlag(true);	// デバッグ表示ON
-
-	// お立ち台初期化
-	Paddle stageBox(STAGE_BOX);
-	stageBox.freeze();
-	player.debugValidFlag(true);	// デバッグ表示ON
+	player.debugValidFlag(false);	// デバッグ表示ON
 
 	//画面外に左右下の画面外判定用BOX
 	Paddle screenOutBoxes[] =
@@ -75,7 +70,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Collider* pCollider = Collider::getInstance();
 
 	// コライダーに登録
-	pCollider->push(&stageBox);
 	pCollider->push(&player);
 	for (int i = 0; i < sizeof(SCN_OUT_BOXES) / sizeof(BOX); i++)
 	{
@@ -93,6 +87,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	PaddleFactory* pPaddleMgr = PaddleFactory::getInstance();
 	pPaddleMgr->init();
 
+	// お立ち台作成
+	pPaddleMgr->createPaddle(STAGE_BOX);
+	Paddle* p = pPaddleMgr->getPaddle(0);
+	p->freeze();
+
 	// ループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
@@ -105,24 +104,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		{//一定範囲の画面外に出て、かつ死んでる場合はゲームループ
 
 			StopSoundMem(soundHandle);
-			printfDx("\n　おわり　なんか押して");
-			printfDx("\n　");
-			printfDx("\n　　チーフプログラマ：ホッピー");
-			printfDx("\n　　サブプログラマ：あなた");
-			printfDx("\n　　絵の製作：どうなつ");
+			DrawString(30, 30, "おわり　なんか押して", 0xFFFFFF);
+
+			DrawString(50, 50, "チーフプログラマ：ホッピー", 0xFFFFFF);
+			DrawString(50, 70, "サブプログラマ：あなた", 0xFFFFFF);
+			DrawString(50, 90, "絵の製作：どうなつ", 0xFFFFFF);
 			ScreenFlip();
 			WaitKey();
 
 			// 初期化して
 			PlaySoundMem(soundHandle, DX_PLAYTYPE_LOOP);
 
-			stageBox.setBox(STAGE_BOX);
 			player.init();
 			pPaddleMgr->init();
+			pPaddleMgr->createPaddle(STAGE_BOX);
+			Paddle* p = pPaddleMgr->getPaddle(0);
+			p->freeze();
 
 		}
 
-		stageBox.update();
 		pPaddleMgr->update(player);
 
 		// 子リジョン処理を実施
@@ -130,7 +130,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// --- 描画処理画面を初期化する
 		player.draw();
-		stageBox.draw();
 		pPaddleMgr->draw();
 
 		drawSplinter();

@@ -47,6 +47,14 @@ void PaddleFactory::destroy()
 void PaddleFactory::init()
 {
 	_startTime = -1;
+
+	// 全て解放しパドルをリセットする。
+	for (auto it = _paddles.begin(); it != _paddles.end(); it++)
+	{
+		Collider::getInstance()->erase(*it);	// 衝突配列から削除
+		delete (*it);
+	}
+	_paddles.clear();
 }
 
 void PaddleFactory::update(const Player& player)
@@ -84,7 +92,7 @@ void PaddleFactory::update(const Player& player)
 
 		DOUBLE2 d2 = playerPos;
 		d2.y +=  (rand() % 150 * -1);
-		Paddle* p = new Paddle(BOX{ startPosX, d2.y, 96,16});
+		Paddle* p = new Paddle(BOX{ startPosX, d2.y, 95,16});
 		p->setColor(255, 255, 255);
 		p->setVecolity((2 + (rand()%8)) * vNorm);
 
@@ -133,4 +141,22 @@ void PaddleFactory::update(const Player& player)
 void PaddleFactory::draw()
 {
 	ITERATOR_CALL_FUNC(_paddles,draw);
+}
+
+Paddle* PaddleFactory::getPaddle(int i) const
+{
+	if (i < 0 || _paddles.size() <= i) return nullptr;
+
+	return _paddles[i];
+}
+
+void PaddleFactory::createPaddle(BOX bbox)
+{
+	Paddle* p = new Paddle(bbox);
+
+	// コライダー登録
+	Collider::getInstance()->push(p);
+
+	// 追加
+	_paddles.push_back(p);
 }

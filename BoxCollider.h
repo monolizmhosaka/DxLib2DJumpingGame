@@ -13,6 +13,9 @@ public:
 		UNKNOWN = -1
 	};
 
+	void setHitedBox(const BOX& box) { _hitedBox = box; }
+	BOX getHitedBox() const { return _hitedBox; }
+
 	void setBox(const BOX& box) { _box = box; }
 	BOX getBox() const { return _box; }
 
@@ -39,6 +42,7 @@ public:
 protected:
 	BOX _box = {0,0,0,0};
 	BOX _prevBox = { 0, 0, 0, 0 };
+	BOX _hitedBox = { 0,0,0.0 };
 
 	ColliderTAG _tag = UNKNOWN;
 

@@ -25,6 +25,7 @@ void Paddle::freeze()
 	_freeze = true;
 	_color = GetColor(rand()%256, rand()% 256, rand()% 256);
 
+
 	// 読みこんだ音をノーマル再生します(『PlaySoundMem』関数使用)
 	PlaySoundMem(_soundHandle, DX_PLAYTYPE_BACK);
 
