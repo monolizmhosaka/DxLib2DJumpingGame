@@ -4,9 +4,7 @@
 
 Paddle::Paddle(const BOX& box)
 {
-	_box = box;
-
-	_prevBox = _box;
+	_box = _prevBox = box;
 
 	_soundHandle = LoadSoundMem("se1.wav");
 
@@ -55,7 +53,7 @@ void Paddle::innerDraw()
 {
 	if (_visibility == false) return;
 
-	BOX box = _box;
+	const BOX& box = _box;
 
 	int halfW = int(box.size.w) / 2; int halfH = int(box.size.h) / 2;
 	DrawBox(int(box.pos.x) - halfW, int(box.pos.y) - halfH, int(box.pos.x) + halfW, int(box.pos.y) + halfH, _color, _freeze);
@@ -65,7 +63,7 @@ void Paddle::innerDraw()
 void Paddle::innerOnCollisionEvent(BoxCollider* tBox)
 {
 	// ‰æ–ÊŠO“–‚½‚è”»’èBOX‚ÉG‚ê‚½‚çŽ€‚Ê
-	if (tBox->getTag() == BoxCollider::SCN_OUT_BOX)
+	if (tBox->getTag() == BoxCollider::ColliderTAG::SCN_OUT_BOX)
 	{
 		_die = true;
 	}

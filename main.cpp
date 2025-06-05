@@ -51,8 +51,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// プレイヤー情報
 	Player player;
-	player.setTag(BoxCollider::PLAYER);
-	player.debugValidFlag(false);	// デバッグ表示ON
+	player.setTag(BoxCollider::ColliderTAG::PLAYER);
+	player.debugValidFlag(false);	// デバッグ表示ON/OFF
 
 	//画面外に左右下の画面外判定用BOX
 	Paddle screenOutBoxes[] =
@@ -62,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// トゲトゲ当たり用
 	Paddle deadBox(BOX{ WIN_SIZE.x / 2.0, double(WIN_SIZE.y - 15), double(WIN_SIZE.x), 30 });
-	deadBox.setTag(BoxCollider::DEAD_BOX);
+	deadBox.setTag(BoxCollider::ColliderTAG::DEAD_BOX);
 	deadBox.visibility(false);
 
 	// コライダーを生成
@@ -73,7 +73,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	pCollider->push(&player);
 	for (int i = 0; i < sizeof(SCN_OUT_BOXES) / sizeof(BOX); i++)
 	{
-		screenOutBoxes[i].setTag(BoxCollider::SCN_OUT_BOX);
+		screenOutBoxes[i].setTag(BoxCollider::ColliderTAG::SCN_OUT_BOX);
 		pCollider->push(&screenOutBoxes[i]);
 	}
 	pCollider->push(&deadBox);
@@ -87,10 +87,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	PaddleFactory* pPaddleMgr = PaddleFactory::getInstance();
 	pPaddleMgr->init();
 
-	// お立ち台作成
+	// お立ち台作成 フリーズ状態
 	pPaddleMgr->createPaddle(STAGE_BOX);
-	Paddle* p = pPaddleMgr->getPaddle(0);
-	p->freeze();
+	pPaddleMgr->getPaddle(0)->freeze();
 
 	// ループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
@@ -118,8 +117,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			player.init();
 			pPaddleMgr->init();
 			pPaddleMgr->createPaddle(STAGE_BOX);
-			Paddle* p = pPaddleMgr->getPaddle(0);
-			p->freeze();
+			pPaddleMgr->getPaddle(0)->freeze();
 
 		}
 
@@ -141,12 +139,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// サウンドハンドルの削除
 	DeleteSoundMem(soundHandle);
+
 	// 色々解放
 	Collider::destroy();
 	PaddleFactory::destroy();
-
-
-
 
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 

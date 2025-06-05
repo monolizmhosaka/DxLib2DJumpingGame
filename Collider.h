@@ -15,12 +15,12 @@ public:
 	void push(BoxCollider*);
 	void erase(BoxCollider*);
 
+	Collider(const Collider&) = delete;	// コピーコンストラクタ禁止
+	Collider& operator=(const Collider&) = delete;	// 代入も禁止
 private:
 	Collider() {};
 	virtual ~Collider() {};
 
-	Collider(const Collider&);	// コピーコンストラクタ禁止
-	Collider& operator=(const Collider&) {};	// 代入も禁止
 
 	vector<BoxCollider*> _pBoxList;
 

@@ -7,15 +7,6 @@
 #include "Camera.h"
 #include "Player.h"
 
-// イテレーターマクロ 
-#define ITERATOR_CALL_FUNC(v,f) \
-		for (auto it = v.begin(); it != v.end(); it++) \
-		{\
-			(*it)->f();\
-		}
-
-
-
 // 唯一のインスタンス
 PaddleFactory* PaddleFactory::pInstance = nullptr;
 PaddleFactory* PaddleFactory::getInstance()
@@ -64,7 +55,7 @@ void PaddleFactory::update(const Player& player)
 	int spanSec = (GetNowCount() - _startTime) / 1000;	// ミリ秒から秒へ
 	Camera::y = -spanSec / 100.f;
 
-	//printfDx("\n　ふんばった時間：%d秒\n", spanSec);
+	// めんどいからここで出す
 	stringstream ss;
 	ss << "ふんばった時間：" << spanSec << "秒";
 	DrawString(30, 30, ss.str().c_str(), 0xFFFFFF);
@@ -115,10 +106,6 @@ void PaddleFactory::update(const Player& player)
 
 	// 画面外判定していないやつは削除 vectorを走査して削除するのはきをつけるべし
 	// 以下は安全に削除するやり方
-	// 
-	// 
-	// 
-	//コライダーがポインタもってるので、当たり判定で削除する方法をとるに変更
 	auto itr = _paddles.begin();
 	while (itr != _paddles.end())
 	{

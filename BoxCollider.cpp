@@ -20,7 +20,7 @@ bool BoxCollider::isScreenArea(int bias)
 // Õ“ËƒCƒxƒ“ƒg
 void BoxCollider::OnCollisionEvent(BoxCollider* pBox)
 {
-	if (_collisionEvent == false) return;
+	if (_doCollision == false) return;
 
 	innerOnCollisionEvent(pBox);
 }

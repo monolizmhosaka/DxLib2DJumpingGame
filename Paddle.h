@@ -15,9 +15,7 @@ public:
 	void setColor(int r, int g, int b);
 	void setVecolity(int v);
 
-	//void requestToDie() { _die = true; };
 	bool isDie() const { return _die; };
-
 
 	void visibility(bool flag) { _visibility = flag; };
 	bool isVisibility() const { return _visibility; };

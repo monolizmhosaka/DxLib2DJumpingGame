@@ -171,7 +171,7 @@ void Player::innerDraw()
 // 衝突イベント
 void Player::innerOnCollisionEvent(BoxCollider* tBox)
 {
-	if (tBox->getTag() == BoxCollider::DEAD_BOX)
+	if (tBox->getTag() == BoxCollider::ColliderTAG::DEAD_BOX)
 	{// 死亡なり。
 		_dieFlag = true;
 		_upPower = 50;

@@ -50,6 +50,16 @@ const BOX SCN_OUT_BOXES[] = {
 //お立ち台
 const BOX STAGE_BOX = { WIN_SIZE.x / 2.0, WIN_SIZE.y / 2.0, 64.0, 64.0 };	//お立ち台
 
+
+// イテレーターマクロ 
+#define ITERATOR_CALL_FUNC(v,f) \
+		for (auto it = v.begin(); it != v.end(); it++) \
+		{\
+			(*it)->f();\
+		}
+
+
+
 #ifdef TAIKEN_COLLISION 
 static bool collisionBoxBox(const BOX& a, const BOX& b)
 {

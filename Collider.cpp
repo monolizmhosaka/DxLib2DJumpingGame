@@ -34,10 +34,10 @@ void Collider::destroy()
 }
 
 // 比較関数定義
-bool compareByBoxY(const BoxCollider* a, const BoxCollider* b) {
-
-	return a->getBox().pos.y < b->getBox().pos.y;
-}
+//bool compareByBoxY(const BoxCollider* a, const BoxCollider* b) {
+//
+//	return a->getBox().pos.y < b->getBox().pos.y;
+//}
 
 void Collider::push(BoxCollider* pBox)
 {
@@ -69,22 +69,21 @@ void Collider::push(BoxCollider* pBox)
 
 }
 
-
+// 指定されたBoxColliderをリストから削除する
 void Collider::erase(BoxCollider* pBox)
 {
 	auto it = std::find(_pBoxList.begin(), _pBoxList.end(), pBox);
 	_pBoxList.erase(it);
 }
 
+// 当たり判定のメイン処理　全てのUpdate関数を呼び出した後に呼び出すこと。
 void Collider::updateCollision()
 {
 	// 全ての組み合わせを当たり判定処理
-	//// 当たり判定
 	for (auto it = _pBoxList.begin(); it != _pBoxList.end(); it++)
 	{
 		for (auto it2 = it + 1; it2 != _pBoxList.end(); it2++)
 		{
-
 			BOX box = (*it)->getBox();
 			BOX prevBox = (*it)->getPrevBox();
 
@@ -96,19 +95,22 @@ void Collider::updateCollision()
 			VECTOR_D box2v = { box2.pos.x - prevBox2.pos.x, box2.pos.y - prevBox2.pos.y, .0f };
 			
 			// とりあえず刻んで当たり判定を厳密に行う
-			for (int i = 10; i >= 0; i--) {
-				BOX relativeBox = { prevBox.pos.x + (box1v.x * i/10), prevBox.pos.y + (box1v.y * i / 10), box.size.w, box.size.h };
-				BOX relativeBox2 = { prevBox2.pos.x + (box2v.x * i / 10), prevBox2.pos.y + (box2v.y * i / 10), box2.size.w, box2.size.h };
+			static int resolution = 10;
+			for (int i = resolution; i >= 0; i--) {
+				BOX relativeBox = { prevBox.pos.x + (box1v.x * i/ resolution), prevBox.pos.y + (box1v.y * i / resolution), box.size.w, box.size.h };
+				BOX relativeBox2 = { prevBox2.pos.x + (box2v.x * i / resolution), prevBox2.pos.y + (box2v.y * i / resolution), box2.size.w, box2.size.h };
 
 				if (collisionBoxBox(relativeBox, relativeBox2))
 				{
+					// 衝突時典でのBOX情報を設定
 					(*it)->setHitedBox(relativeBox);
 					(*it2)->setHitedBox(relativeBox2);
 
+					// 各オブジェクトの衝突処理を呼び出す
 					(*it)->OnCollisionEvent(*it2);
 					(*it2)->OnCollisionEvent(*it);
-					break;
 
+					break;
 				}
 			}
 		}
