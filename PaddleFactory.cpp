@@ -7,8 +7,9 @@
 #include "Camera.h"
 #include "Player.h"
 
-const int paddleHeight = 16;	// ちょうどいいのは16 
-const int paddleWedth = 95;	// ちょうどいいのは95
+const DOUBLE2 paddleSize = {95, 16};
+const int paddleBaseSpeed = 12;	// ちょうどいいのは2
+const int paddleMaxSpeed = 12;	// ちょうどいいのは8
 
 // 唯一のインスタンス
 PaddleFactory* PaddleFactory::pInstance = nullptr;
@@ -83,9 +84,9 @@ void PaddleFactory::update(const Player& player)
 
 		DOUBLE2 d2 = playerPos;
 		d2.y +=  (rand() % 150 * -1);
-		Paddle* p = new Paddle(BOX{ startPosX, d2.y, paddleWedth, paddleHeight});
+		Paddle* p = new Paddle(BOX{ startPosX, d2.y, paddleSize.x, paddleSize.y});
 		p->setColor(255, 255, 255);
-		p->setVecolity((2 + (rand()%8)) * vNorm);
+		p->setVecolity((paddleBaseSpeed + (rand()% paddleMaxSpeed)) * vNorm);
 
 		// コライダー登録
 		Collider::getInstance()->push(p);

@@ -39,7 +39,7 @@ struct BOX
 const int GRAVITY = 4;
 
 // ウィンドウサイズ
-const INT2 WIN_SIZE = {480, 640};
+const INT2 WIN_SIZE = {480, 640};	// ベストは480, 640
 
 const BOX SCN_OUT_BOXES[] = {
 	{WIN_SIZE.x / 2.0, WIN_SIZE.y + 300.0, double(WIN_SIZE.x), 100.0},	// under
