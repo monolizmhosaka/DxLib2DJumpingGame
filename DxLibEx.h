@@ -98,7 +98,7 @@ static bool collisionBoxBox(const BOX& a, const BOX& b)
 	double abHW = a.size.w / 2 + b.size.w / 2;
 	double abHH = a.size.h / 2 + b.size.h / 2;
 
-	if (dx < abHW && dy < abHH)
+	if (dx <= abHW && dy <= abHH)
 	{
 		return true;
 	}

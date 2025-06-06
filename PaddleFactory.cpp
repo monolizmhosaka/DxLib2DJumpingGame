@@ -7,6 +7,9 @@
 #include "Camera.h"
 #include "Player.h"
 
+const int paddleHeight = 16;	// ちょうどいいのは16 
+const int paddleWedth = 95;	// ちょうどいいのは95
+
 // 唯一のインスタンス
 PaddleFactory* PaddleFactory::pInstance = nullptr;
 PaddleFactory* PaddleFactory::getInstance()
@@ -80,7 +83,7 @@ void PaddleFactory::update(const Player& player)
 
 		DOUBLE2 d2 = playerPos;
 		d2.y +=  (rand() % 150 * -1);
-		Paddle* p = new Paddle(BOX{ startPosX, d2.y, 95,16});
+		Paddle* p = new Paddle(BOX{ startPosX, d2.y, paddleWedth, paddleHeight});
 		p->setColor(255, 255, 255);
 		p->setVecolity((2 + (rand()%8)) * vNorm);
 

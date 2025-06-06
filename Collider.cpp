@@ -97,7 +97,7 @@ void Collider::updateCollision()
 			// ‚Æ‚è‚ ‚¦‚¸‚ñ‚Å“–‚½‚è”»’è‚ðŒµ–§‚És‚¤
 			static int resolution = 10;
 			for (int i = resolution; i >= 0; i--) {
-				BOX relativeBox = { prevBox.pos.x + (box1v.x * i/ resolution), prevBox.pos.y + (box1v.y * i / resolution), box.size.w, box.size.h };
+				BOX relativeBox = { prevBox.pos.x + (box1v.x * i / resolution), prevBox.pos.y + (box1v.y * i / resolution), box.size.w, box.size.h };
 				BOX relativeBox2 = { prevBox2.pos.x + (box2v.x * i / resolution), prevBox2.pos.y + (box2v.y * i / resolution), box2.size.w, box2.size.h };
 
 				if (collisionBoxBox(relativeBox, relativeBox2))

@@ -201,6 +201,7 @@ void Player::innerOnCollisionEvent(BoxCollider* tBox)
 					if (isJump() == TRUE || (isJump() == FALSE && p->isFreeze()))
 					{// ジャンプ中、またはジャンプ中ではなければフリーズ物体ならそのまま
 						_box.pos.y = (tBox->getBox().pos.y - tBox->getBox().size.h / 2 - _box.size.h / 2);
+						//printfDx("_box.pos.y=%d\n", (int)_box.pos.y);
 						_upPower = 0;
 						_jumpFlag = FALSE;
 
