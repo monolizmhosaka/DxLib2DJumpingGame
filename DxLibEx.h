@@ -9,12 +9,25 @@
 
 
 #define PI (3.14159)	// ‰~Žü—¦
+//
+//typedef struct _tagINT2
+//{
+//	int x;
+//	int y;
+//} INT2;
 
-typedef struct _tagINT2
+union INT2
 {
-	int x;
-	int y;
-} INT2;
+	struct {
+		int x, y;
+	};
+	struct {
+		int w, h;
+	};
+	struct {
+		int a, b;
+	};
+};
 
 // ‹¤—p‘Ì
 union DOUBLE2
@@ -24,6 +37,9 @@ union DOUBLE2
 	};
 	struct {
 		double w, h;
+	};
+	struct {
+		double a, b;
 	};
 };
 
