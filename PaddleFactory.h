@@ -16,7 +16,8 @@ public:
 	void init();
 	void update(const Player& player);
 	void draw();
-
+	void drawDurationTime();
+	
 	PaddleFactory(const PaddleFactory&) = delete;	// コピーコンストラクタ禁止
 	void operator=(const PaddleFactory&) = delete;	// 代入も禁止
 
@@ -32,6 +33,7 @@ private:
 
 	int _firingSpan = 100;
 	int _startTime = -1;
+	int _durationTime = 0;
 	int _oldTimeCount = 0;
 
 	vector<Paddle*> _paddles;

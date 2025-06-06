@@ -38,6 +38,7 @@ void PaddleFactory::destroy()
 void PaddleFactory::init()
 {
 	_startTime = -1;
+	_durationTime = 0;
 
 	// 全て解放しパドルをリセットする。
 	for (auto it = _paddles.begin(); it != _paddles.end(); it++)
@@ -52,13 +53,9 @@ void PaddleFactory::update(const Player& player)
 {
 	// 経過時間の難易度調整 これは全体スクロールの難度調整
 	if ( _startTime == -1 ) _startTime = GetNowCount();
-	int spanSec = (GetNowCount() - _startTime) / 1000;	// ミリ秒から秒へ
-	Camera::y = -spanSec / 100.f;
+	_durationTime = (GetNowCount() - _startTime) / 1000;	// ミリ秒から秒へ
+	Camera::y = -_durationTime / 100.f;
 
-	// めんどいからここで出す
-	stringstream ss;
-	ss << "ふんばった時間：" << spanSec << "秒";
-	DrawString(30, 30, ss.str().c_str(), 0xFFFFFF);
 
 	//スクロール速度に応じてパドル出力間隔を調整
 	int spanLow = 100, spanUp = 800;
@@ -125,9 +122,21 @@ void PaddleFactory::update(const Player& player)
 	ITERATOR_CALL_FUNC(_paddles, update);
 }
 
+void PaddleFactory::drawDurationTime()
+{
+	// めんどいからここで出す
+	stringstream ss;
+	ss << "ふんばった時間：" << _durationTime << "秒";
+	DrawString(30, 30, ss.str().c_str(), 0xFFFFFF);
+}
+
+
 void PaddleFactory::draw()
 {
-	ITERATOR_CALL_FUNC(_paddles,draw);
+	// めんどいからここで出す
+	drawDurationTime();
+
+	ITERATOR_CALL_FUNC(_paddles, draw);
 }
 
 Paddle* PaddleFactory::getPaddle(int i) const

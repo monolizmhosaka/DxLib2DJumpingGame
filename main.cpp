@@ -99,15 +99,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// --- 更新系処理
 		player.update();
+
 		if (player.isScreenArea(200) == false && player.isDie()) 
 		{//一定範囲の画面外に出て、かつ死んでる場合はゲームループ
 
 			StopSoundMem(soundHandle);
-			DrawString(30, 30, "おわり　なんか押して", 0xFFFFFF);
+			pPaddleMgr->drawDurationTime();
+			DrawString(30, 60, "おわり　なんか押して", 0xFFFFFF);
 
-			DrawString(50, 50, "チーフプログラマ：ホッピー", 0xFFFFFF);
-			DrawString(50, 70, "サブプログラマ：あなた", 0xFFFFFF);
-			DrawString(50, 90, "絵の製作：どうなつ", 0xFFFFFF);
+			DrawString(50, 80, "チーフプログラマ：ホッピー", 0xFFFFFF);
+			DrawString(50, 100, "サブプログラマ：あなた", 0xFFFFFF);
+			DrawString(50, 120, "絵の製作：どうなつ", 0xFFFFFF);
 			ScreenFlip();
 			WaitKey();
 
