@@ -1,10 +1,12 @@
 #pragma once
 
+#include <list>
 #include <vector>
 
 using namespace std;
 
-class BoxCollider;
+#include "BoxCollider.h"
+
 class Collider
 {
 public:
@@ -15,14 +17,20 @@ public:
 	void push(BoxCollider*);
 	void erase(BoxCollider*);
 
+	using ExclusionPair = std::pair<BoxCollider::ColliderTAG, BoxCollider::ColliderTAG>;
+	void addExclusion(ExclusionPair pair);
+
 	Collider(const Collider&) = delete;	// コピーコンストラクタ禁止
 	Collider& operator=(const Collider&) = delete;	// 代入も禁止
 private:
 	Collider() {};
 	virtual ~Collider() {};
 
+	// 挿入が頻繁にあるかもなのでlistのがいい。
+	list<BoxCollider*> _pBoxList;
 
-	vector<BoxCollider*> _pBoxList;
+	// 当たり判定の組み合わせ除外リスト
+	vector<ExclusionPair> _exclusionList;
 
 private:
 	static Collider* pInstance;

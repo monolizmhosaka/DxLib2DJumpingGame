@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <utility>
 
 #include "Collider.h"
 
@@ -76,14 +77,34 @@ void Collider::erase(BoxCollider* pBox)
 	_pBoxList.erase(it);
 }
 
+void Collider::addExclusion(ExclusionPair pair)
+{
+	// 検索用に入れ替えも作っておく
+	_exclusionList.push_back(pair);
+	std::swap(pair.first, pair.second);
+	_exclusionList.push_back(pair);
+
+}
+
+
 // 当たり判定のメイン処理　全てのUpdate関数を呼び出した後に呼び出すこと。
 void Collider::updateCollision()
 {
 	// 全ての組み合わせを当たり判定処理
 	for (auto it = _pBoxList.begin(); it != _pBoxList.end(); it++)
 	{
-		for (auto it2 = it + 1; it2 != _pBoxList.end(); it2++)
+		for (auto it2 = std::next(it, 1); it2 != _pBoxList.end(); it2++)
 		{
+			bool flag = false;
+			for (auto ite = _exclusionList.begin(); ite != _exclusionList.end(); ite++)
+			{
+				if ((*it)->getTag() == (*ite).first && (*it2)->getTag() == (*ite).second)
+				{
+					flag = true;
+				}
+			}
+			if (flag == true) continue;
+
 			BOX box = (*it)->getBox();
 			BOX prevBox = (*it)->getPrevBox();
 

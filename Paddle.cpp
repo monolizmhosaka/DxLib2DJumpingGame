@@ -8,6 +8,7 @@ Paddle::Paddle(const BOX& box)
 
 	_soundHandle = LoadSoundMem("se1.wav");
 
+	setTag(ColliderTAG::PADDLE);
 }
 
 Paddle::~Paddle()

@@ -68,6 +68,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 	Collider::create();
 	Collider* pCollider = Collider::getInstance();
 
+	// 当たり判定の除外リストを登録 コライダー同士は除外よ。
+	pCollider->addExclusion(make_pair(BoxCollider::ColliderTAG::PADDLE, BoxCollider::ColliderTAG::PADDLE));
+
 	// コライダーに登録
 	pCollider->push(&player);
 	for (int i = 0; i < sizeof(SCN_OUT_BOXES) / sizeof(BOX); i++)

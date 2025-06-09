@@ -10,6 +10,7 @@ public:
 		SCN_OUT_BOX = 0,
 		DEAD_BOX = 1,
 		PLAYER = 2,
+		PADDLE = 3,
 		UNKNOWN = -1
 	};
 
