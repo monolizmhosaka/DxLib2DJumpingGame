@@ -111,12 +111,12 @@ void Collider::updateCollision()
 			BOX box2 = (*it2)->getBox();
 			BOX prevBox2 = (*it2)->getPrevBox();
 
-			// それぞれの速度を求め相対速度を求める
+			// それぞれの速度を求める
 			VECTOR_D box1v = { box.pos.x - prevBox.pos.x, box.pos.y - prevBox.pos.y, .0f };
 			VECTOR_D box2v = { box2.pos.x - prevBox2.pos.x, box2.pos.y - prevBox2.pos.y, .0f };
 			
 			// とりあえず刻んで当たり判定を厳密に行う
-			static int resolution = 10;
+			static int resolution = 5;
 			for (int i = resolution; i >= 0; i--) {
 				BOX relativeBox = { prevBox.pos.x + (box1v.x * i / resolution), prevBox.pos.y + (box1v.y * i / resolution), box.size.w, box.size.h };
 				BOX relativeBox2 = { prevBox2.pos.x + (box2v.x * i / resolution), prevBox2.pos.y + (box2v.y * i / resolution), box2.size.w, box2.size.h };
